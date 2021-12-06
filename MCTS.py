@@ -46,8 +46,7 @@ class MCTS():
         if state not in self.Ps:
             self.Ps[state], v = self.network.predict(board)
             valids = self.game.getValidMoves(board, 1)
-            if self.Ps[state] not in valids:
-                self.Ps[state] = 0
+            self.Ps[state] = self.Ps[state] * valids
             sum_Ps_s = np.sum(self.Ps[state])
             if sum_Ps_s > 0:
                 self.Ps[state] /= sum_Ps_s
@@ -65,8 +64,10 @@ class MCTS():
         bestAction = -1
 
         for action in range(self.game.getActionSize()):
+            if action >= len(valids):
+                break
             if valids[action]:
-                if (state, action) in self.Qsa:
+                if (state, action) in self.Qtable:
                     u = self.Qsa[(state, action)] + self.args['cpuct'] * self.Ps[state][action] * sqrt(self.Ns[state]) / (
                             1 + self.Nsa[(state, action)])
                 else:
@@ -77,6 +78,7 @@ class MCTS():
                     best_act = action
 
         action = best_act
+        print(action)
         next_s, next_player = self.game.getNextState(board, 1, action)
         next_s = self.game.getCanonicalForm(next_s, next_player)
 
