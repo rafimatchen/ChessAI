@@ -18,4 +18,3 @@ class Network():
 
         self.model = keras.Model(inputs=self.inputBoards, outputs=[self.pi, self.v])
         self.model.compile(loss=['categorical_crossentropy', 'mean_squared_error'], optimizer='adam')
-        print(self.model.summary())

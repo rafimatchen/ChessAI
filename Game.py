@@ -1,4 +1,7 @@
 import chess
+import numpy as np
+import copy
+
 class Game():
     def __init__(self):
         pass
@@ -13,11 +16,18 @@ class Game():
         return 8 * 8 * (8 * 7 + 8 + 9)
 
     def getNextState(self, board, player, action):
-        board.push(action)
-        return board
+        board.push(list(board.legal_moves)[action])
+        return board, player
 
     def getValidMoves(self, board, player):
-        return list(board.legal_moves)
+        valids = [0] * self.getActionSize()
+        b = copy.deepcopy(board)
+        moves = list(b.legal_moves)
+        if len(moves) == 0:
+            return np.array(valids)
+        for i in range(len(moves)):
+            valids[i] = 1
+        return np.array(valids)
 
     def getGameEnded(self, board, player):
         outcome = board.outcome()
