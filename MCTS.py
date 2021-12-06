@@ -46,7 +46,8 @@ class MCTS():
         if state not in self.Ps:
             self.Ps[state], v = self.network.predict(board)
             valids = self.game.getValidMoves(board, 1)
-            self.Ps[state] = self.Ps[state] * valids
+            if self.Ps[state] not in valids:
+                self.Ps[state] = 0
             sum_Ps_s = np.sum(self.Ps[state])
             if sum_Ps_s > 0:
                 self.Ps[state] /= sum_Ps_s
