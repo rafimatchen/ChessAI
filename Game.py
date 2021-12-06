@@ -17,7 +17,7 @@ class Game():
         return board
 
     def getValidMoves(self, board, player):
-        return board.legal_moves
+        return list(board.legal_moves)
 
     def getGameEnded(self, board, player):
         outcome = board.outcome()
